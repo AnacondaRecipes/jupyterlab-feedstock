@@ -18,6 +18,12 @@ build:
     - jupyter-labextension = jupyterlab.labextensions:main
     - jlpm = jupyterlab.jlpmapp:main
 
+app:
+  entry: jupyter lab
+  icon: icon.png
+  summary: JupyterLab PRE-ALPHA
+  type: desk
+
 requirements:
   host:
     - python >=3.5
