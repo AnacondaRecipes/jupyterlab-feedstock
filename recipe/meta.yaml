@@ -1,15 +1,12 @@
-{% set version = "2.2.6" %}
-{% set sha256 = "6554b022d2cd120100e165ec537c6511d70de7f89e253b3c667ea28f2a9263ff" %}
-
+{% set version = "3.0.11" %}
 
 package:
   name: jupyterlab
   version: {{ version }}
 
 source:
-  fn: jupyterlab-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/j/jupyterlab/jupyterlab-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  sha256: ce4cf4f31163ce51aed013c01a857c05d43a93c46ed690166e48644f6e7947de
 build:
   noarch: python
   number: 1
@@ -17,6 +14,7 @@ build:
   entry_points:
     - jupyter-lab = jupyterlab.labapp:main
     - jupyter-labextension = jupyterlab.labextensions:main
+    - jupyter-labhub = jupyterlab.labhubapp:main
     - jlpm = jupyterlab.jlpmapp:main
 
 app:
@@ -27,26 +25,43 @@ app:
 
 requirements:
   host:
-    - python >=3.5
+    - jupyter-packaging >=0.7.3,<0.8.0
+    - nodejs >=12,!=13.*,!=15.*,!=17.*
+    - packaging
     - pip
-    - nodejs >=10
+    - python >=3.6
+    - wheel
   run:
-    - python >=3.5
-    - jupyterlab_server >=1.1.0,<2.0.0
-    - notebook >=4.3.1
-    - tornado !=6.0.0,!=6.0.1,!=6.0.2
+    - ipython
     - jinja2 >=2.10
+    - jupyter_core
+    - jupyter-packaging >=0.7.3,<0.8.0
+    - jupyter_server >=1.4,<2
+    - jupyterlab_server >=2.3,<3
+    - nbclassic >=0.2,<1
+    - packaging
+    - python >=3.6
+    - tornado >=6.1
 test:
   requires:
-    - nodejs >=10
+    - nodejs >=12,!=13.*,!=15.*,!=17.*
+    - pip
+    - m2-grep  # [win]
   imports:
     - jupyterlab
   commands:
+    - pip check
     - jupyter lab --version
     - jlpm --version
     - jlpm versions
     - jupyter labextension list
     - jupyter lab path
+    - jupyter server extension list
+    - jupyter serverextension list
+    - jupyter server extension list 1>server_extensions 2>&1
+    - cat server_extensions | grep "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"
+    - jupyter serverextension list 1>serverextensions 2>&1
+    - cat serverextensions | grep "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"
     - jupyter lab build
     - jupyter lab clean
 
@@ -74,4 +89,5 @@ extra:
     - ian-r-rose
     - afshin
     - ellisonbg
-    - saulshanabrook
+    - jtpio
+    - bollwyvl
