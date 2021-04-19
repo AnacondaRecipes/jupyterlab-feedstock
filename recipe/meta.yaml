@@ -46,6 +46,7 @@ test:
   requires:
     - nodejs >=12,!=13.*,!=15.*,!=17.*
     - pip
+    - m2-sed #[win]
     - m2-grep  # [win]
     - m2-coreutils # [win]
   imports:
