@@ -1,4 +1,4 @@
-{% set version = "3.0.11" %}
+{% set version = "3.0.14" %}
 
 package:
   name: jupyterlab
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/j/jupyterlab/jupyterlab-{{ version }}.tar.gz
-  sha256: ce4cf4f31163ce51aed013c01a857c05d43a93c46ed690166e48644f6e7947de
+  sha256: 713a84991dfcca8c0bc260911f1bd54ac25a386a86285713b9555a60f795059b
 build:
   noarch: python
   number: 1
@@ -47,6 +47,7 @@ test:
     - nodejs >=12,!=13.*,!=15.*,!=17.*
     - pip
     - m2-grep  # [win]
+    - m2-coreutils # [win]
   imports:
     - jupyterlab
   commands:
@@ -59,9 +60,9 @@ test:
     - jupyter server extension list
     - jupyter serverextension list
     - jupyter server extension list 1>server_extensions 2>&1
-    - cat server_extensions | grep "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"
+    - cat server_extensions | grep -i "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"
     - jupyter serverextension list 1>serverextensions 2>&1
-    - cat serverextensions | grep "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"
+    - cat serverextensions | grep -i "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"
     - jupyter lab build
     - jupyter lab clean
 
