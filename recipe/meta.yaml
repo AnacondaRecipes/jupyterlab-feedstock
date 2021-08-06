@@ -52,8 +52,9 @@ test:
     - jupyter lab path
     - jupyter server extension list
     - jupyter serverextension list
-    - jupyter server extension list | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"
-    - jupyter serverextension list | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"
+    # disabled as these two tests aren't noarch compatible
+    # - jupyter server extension list | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"
+    # - jupyter serverextension list | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"
     - jupyter lab build
     - jupyter lab clean
 
