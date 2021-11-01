@@ -9,13 +9,19 @@ source:
   sha256: 54466941bcd9b52f23373a32038fbb4e50fd652d4536df6179b53e1ffb8ef431
 build:
   noarch: python
-  number: 0
+  number: 1
   script: {{ PYTHON }} -m pip install --install-option="--skip-npm" . -vv
   entry_points:
     - jupyter-lab = jupyterlab.labapp:main
     - jupyter-labextension = jupyterlab.labextensions:main
     - jupyter-labhub = jupyterlab.labhubapp:main
     - jlpm = jupyterlab.jlpmapp:main
+
+app:
+  entry: jupyter lab
+  icon: icon.png
+  summary: JupyterLab PRE-ALPHA
+  type: desk
 
 requirements:
   host:
