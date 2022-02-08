@@ -10,6 +10,8 @@ source:
 build:
   noarch: python
   number: 0
+  # nodejs >=14,!=15.*,<17 currently isn't available on s390x.
+  skip: True  # [s390x]
   script: {{ PYTHON }} -m pip install --install-option="--skip-npm" . -vv
   entry_points:
     - jupyter-lab = jupyterlab.labapp:main
