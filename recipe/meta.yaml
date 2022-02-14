@@ -1,4 +1,4 @@
-{% set version = "3.2.1" %}
+{% set version = "3.2.9" %}
 
 package:
   name: jupyterlab
@@ -6,10 +6,12 @@ package:
 
 source:
   url: https://pypi.io/packages/source/j/jupyterlab/jupyterlab-{{ version }}.tar.gz
-  sha256: 54466941bcd9b52f23373a32038fbb4e50fd652d4536df6179b53e1ffb8ef431
+  sha256: 65ddc34e5da1a764606e38c4f70cf9d4ac1c05182813cf0ab2dfea312c701124
 build:
   noarch: python
-  number: 1
+  number: 0
+  # nodejs >=14,!=15.*,<17 currently isn't available on s390x.
+  skip: True  # [s390x]
   script: {{ PYTHON }} -m pip install --install-option="--skip-npm" . -vv
   entry_points:
     - jupyter-lab = jupyterlab.labapp:main
@@ -25,25 +27,26 @@ app:
 
 requirements:
   host:
-    - jupyter-packaging >=0.9,<1
+    - jupyter-packaging >=0.9,<2
     - packaging
     - pip
-    - python >=3.6
+    - python
+    - setuptools
     - wheel
   run:
     - ipython
-    - jinja2 >=2.10
+    - jinja2 >=2.1
     - jupyter_core
     - jupyter_server >=1.4,<2
     - jupyterlab_server >=2.3,<3
     - nbclassic >=0.2,<1
     - packaging
-    - python >=3.6
-    - tornado >=6.1
+    - python >=3.7
+    - tornado >=6.1.0
 
 test:
   requires:
-    - nodejs >=14,<15
+    - nodejs >=14,!=15.*,<17
     - pip
     - ripgrep
   imports:
@@ -63,6 +66,11 @@ test:
     # - jupyter serverextension list | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"
     - jupyter lab build
     - jupyter lab clean
+  downstreams:
+    # Additional testing for downstreams packages: ipympl, plotly, and pyviz_comms
+    - ipympl
+    - plotly
+    - pyviz_comms
 
 about:
   home: https://github.com/jupyterlab/jupyterlab
