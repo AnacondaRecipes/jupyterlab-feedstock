@@ -62,9 +62,7 @@ test:
     - jupyter lab licenses
     - jupyter lab path
     - jupyter server extension list
-    - jupyter serverextension list
-    - jupyter server extension list | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"
-    - jupyter serverextension list | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"
+    - jupyter s erverextension list
     - jupyter lab build
     - jupyter lab clean
   downstreams:
