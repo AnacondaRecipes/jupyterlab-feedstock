@@ -62,7 +62,7 @@ test:
     - jupyter lab licenses
     - jupyter lab path
     - jupyter server extension list
-    - jupyter s erverextension list
+    - jupyter serverextension list
     - jupyter lab build
     - jupyter lab clean
   downstreams:
