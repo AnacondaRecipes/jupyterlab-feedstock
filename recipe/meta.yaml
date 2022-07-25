@@ -69,11 +69,11 @@ test:
     - cat serverextensions | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"   # [not win]
     - jupyter lab build --dev-build=False --minimize=False
     - jupyter lab clean
-  downstreams:
+  #downstreams:
     # Additional testing for downstreams packages: ipympl, plotly, and pyviz_comms
-    - ipympl
-    - plotly
-    - pyviz_comms
+    #- ipympl
+    #- plotly
+    #- pyviz_comms
 
 about:
   home: https://github.com/jupyterlab/jupyterlab
