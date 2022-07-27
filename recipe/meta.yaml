@@ -1,5 +1,5 @@
 {% set name = "jupyterlab" %}
-{% set version = "3.3.2" %}
+{% set version = "3.4.4" %}
 
 package:
   name: {{ name|lower }}
@@ -7,12 +7,12 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 3c716bf5592cb28c5c55c615c6e5bd3efc71898f6957d13719b56478bbbb587a
+  sha256: 5a2a0fdd22bd8628ad45b618e3520387c32a4818e3af112dbad1f649304dfc20
 
 build:
-  noarch: python
   number: 0
   # nodejs >=14,!=15.*,<17 currently isn't available on s390x.
+  skip: True  # [s390x or py<37]
   script: {{ PYTHON }} -m pip install --install-option="--skip-npm" . -vv
   entry_points:
     - jupyter-lab = jupyterlab.labapp:main
@@ -38,11 +38,12 @@ requirements:
     - ipython
     - jinja2 >=2.1
     - jupyter_core
-    - jupyter_server >=1.4,<2
+    - jupyter_server >=1.16,<2
     - jupyterlab_server >=2.10,<3
-    - nbclassic >=0.2,<1
+    - nbclassic
+    - notebook <7
     - packaging
-    - python >=3.7
+    - python
     - tornado >=6.1.0
 
 test:
@@ -62,16 +63,17 @@ test:
     - jupyter lab path
     - jupyter server extension list
     - jupyter serverextension list
-    # disabled as these two tests aren't noarch compatible
-    # - jupyter server extension list | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"
-    # - jupyter serverextension list | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"
-    - jupyter lab build
+    - jupyter server extension list 1>server_extensions 2>&1
+    - cat server_extensions | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"  # [not win]
+    - jupyter serverextension list 1>serverextensions 2>&1
+    - cat serverextensions | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"   # [not win]
+    - jupyter lab build --dev-build=False --minimize=False
     - jupyter lab clean
-  downstreams:
+  #downstreams:
     # Additional testing for downstreams packages: ipympl, plotly, and pyviz_comms
-    - ipympl
-    - plotly
-    - pyviz_comms
+    #- ipympl
+    #- plotly
+    #- pyviz_comms
 
 about:
   home: https://github.com/jupyterlab/jupyterlab
