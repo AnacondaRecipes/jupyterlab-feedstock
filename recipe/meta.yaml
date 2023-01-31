@@ -13,7 +13,7 @@ build:
   number: 0
   # nodejs >=14,!=15.*,<17 currently isn't available on s390x.
   skip: True  # [s390x or py<37]
-  script: {{ PYTHON }} -m pip install --install-option="--skip-npm" . -vv
+  script: {{ PYTHON }} -m pip install --install-option="--skip-npm" --no-deps . -vv
   entry_points:
     - jupyter-lab = jupyterlab.labapp:main
     - jupyter-labextension = jupyterlab.labextensions:main
