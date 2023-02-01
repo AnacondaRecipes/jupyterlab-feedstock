@@ -29,7 +29,7 @@ app:
 requirements:
   host:
     - jupyter-packaging 0.10.4
-    - packaging 22.0
+    - packaging
     - pip
     - python
     - setuptools
