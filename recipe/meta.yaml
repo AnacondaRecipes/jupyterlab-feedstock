@@ -1,5 +1,5 @@
 {% set name = "jupyterlab" %}
-{% set version = "3.5.2" %}
+{% set version = "3.5.3" %}
 
 package:
   name: {{ name|lower }}
@@ -7,13 +7,13 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 10ac094215ffb872ddffbe2982bf1c039a79fecc326e191e7cc5efd84f331dad
+  sha256: 51e889448ae194eeef8e50f63f5c4f487f728f477befe436e9749672f7511dbe
 
 build:
   number: 0
   # nodejs >=14,!=15.*,<17 currently isn't available on s390x.
   skip: True  # [s390x or py<37]
-  script: {{ PYTHON }} -m pip install --install-option="--skip-npm" . -vv
+  script: {{ PYTHON }} -m pip install --install-option="--skip-npm" --no-deps . -vv
   entry_points:
     - jupyter-lab = jupyterlab.labapp:main
     - jupyter-labextension = jupyterlab.labextensions:main
@@ -28,7 +28,7 @@ app:
 
 requirements:
   host:
-    - jupyter-packaging >=0.9,<2
+    - jupyter-packaging 0.12.0
     - packaging
     - pip
     - python
