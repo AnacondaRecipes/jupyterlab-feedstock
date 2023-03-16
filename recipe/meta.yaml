@@ -10,7 +10,7 @@ source:
   sha256: 51e889448ae194eeef8e50f63f5c4f487f728f477befe436e9749672f7511dbe
 
 build:
-  number: 0
+  number: 1
   # nodejs >=14,!=15.*,<17 currently isn't available on s390x.
   skip: True  # [s390x or py<37]
   script: {{ PYTHON }} -m pip install --install-option="--skip-npm" --no-deps . -vv
