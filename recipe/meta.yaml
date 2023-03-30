@@ -44,7 +44,7 @@ requirements:
     - notebook <7
     - packaging
     - python
-    - tomli
+    - tomli  # [py<311]
     - tornado >=6.1.0
 
 test:
