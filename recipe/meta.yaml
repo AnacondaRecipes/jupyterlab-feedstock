@@ -23,7 +23,7 @@ build:
 app:
   entry: jupyter lab
   icon: icon.png
-  summary: JupyterLab 3.4.3
+  summary: JupyterLab {{ version }}
   type: desk
 
 requirements:
