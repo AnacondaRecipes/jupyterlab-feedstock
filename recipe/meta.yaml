@@ -44,7 +44,7 @@ requirements:
     - nbclassic
     - notebook <7
     - python
-    - tomli
+    - tomli  # [py<311]
     - tornado >=6.1.0
 
 test:
