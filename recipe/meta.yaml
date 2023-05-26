@@ -32,6 +32,7 @@ requirements:
     - packaging
     - pip
     - python
+    - setuptools
     - wheel
   run:
     - ipython
@@ -43,6 +44,7 @@ requirements:
     - jupyterlab_server >=2.19,<3
     - nbclassic
     - notebook <7
+    - packaging
     - python
     - tomli  # [py<311]
     - tornado >=6.1.0
