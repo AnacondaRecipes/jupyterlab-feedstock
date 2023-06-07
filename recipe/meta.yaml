@@ -1,5 +1,5 @@
 {% set name = "jupyterlab" %}
-{% set version = "3.5.3" %}
+{% set version = "3.6.3" %}
 
 package:
   name: {{ name|lower }}
@@ -7,13 +7,13 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 51e889448ae194eeef8e50f63f5c4f487f728f477befe436e9749672f7511dbe
+  sha256: 373e9cfb8a72edd294be14f16662563a220cecf0fb26de7aab1af9a29b689b82
 
 build:
   number: 0
   # nodejs >=14,!=15.*,<17 currently isn't available on s390x.
   skip: True  # [s390x or py<37]
-  script: {{ PYTHON }} -m pip install --install-option="--skip-npm" --no-deps . -vv
+  script: {{ PYTHON }} -m pip install --install-option="--skip-npm" --no-deps --no-build-isolation . -vv
   entry_points:
     - jupyter-lab = jupyterlab.labapp:main
     - jupyter-labextension = jupyterlab.labextensions:main
@@ -23,7 +23,7 @@ build:
 app:
   entry: jupyter lab
   icon: icon.png
-  summary: JupyterLab PRE-ALPHA
+  summary: JupyterLab {{ version }}
   type: desk
 
 requirements:
@@ -39,17 +39,19 @@ requirements:
     - jinja2 >=2.1
     - jupyter_core
     - jupyter_server >=1.16,<3
-    - jupyterlab_server >=2.10,<3
+    - jupyter_server_ydoc >=0.8.0,<0.9.0
+    - jupyter_ydoc >=0.2.3,<0.3
+    - jupyterlab_server >=2.19,<3
     - nbclassic
     - notebook <7
     - packaging
     - python
-    - tomli
+    - tomli  # [py<311]
     - tornado >=6.1.0
 
 test:
   requires:
-    - nodejs >=14,!=15.*,!=17.*,<19
+    - nodejs >=16.*,!=17.*,<19
     - pip
     - ripgrep
   imports:
@@ -68,7 +70,10 @@ test:
     - cat server_extensions | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"  # [not win]
     - jupyter serverextension list 1>serverextensions 2>&1
     - cat serverextensions | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"   # [not win]
-    - jupyter lab build --dev-build=False --minimize=False
+    # This is disabled because it depends on webpack 5.x, which in turn depends on Uppercase_Letter
+    # and Lowercase_Letter character classes in nodejs, which requires full ICU support. The code
+    # uses webpack 5.x features, so it is not trivial to work around.
+    # - jupyter lab build --dev-build=False --minimize=False
     - jupyter lab clean
   #downstreams:
     # Additional testing for downstreams packages: ipympl, plotly, and pyviz_comms
