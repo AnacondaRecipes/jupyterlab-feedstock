@@ -13,7 +13,7 @@ build:
   number: 0
   # nodejs currently isn't available on s390x.
   skip: True  # [s390x or py<38]
-  script: {{ PYTHON }} -m pip install --install-option="--skip-npm" --no-deps --no-build-isolation . -vv
+  script: {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
   entry_points:
     - jupyter-lab = jupyterlab.labapp:main
     - jupyter-labextension = jupyterlab.labextensions:main
@@ -30,6 +30,7 @@ requirements:
   host:
     - jupyter-packaging
     - hatchling >=1.5.0
+    - hatch-jupyter-builder >=0.3.2
     - pip
     - python
   run:
@@ -48,37 +49,39 @@ requirements:
     - traitlets
     - tornado >=6.2.0
     - tomli  # [py<311]
+  run_constrained:
+    - nodejs >=18.0.0
 
-test:
+test:  
+  source_files:
+    - conftest.py
   requires:
     - pip
     - ripgrep
+    - pytest >=7.0
+    - pytest-console-scripts
+    - pytest-jupyter >=0.5.3
+    - pytest-timeout
+    - pytest-tornasync
+    - requests
+    - nodejs
   imports:
     - jupyterlab
   commands:
     - pip check
     - jupyter lab --version
     - jlpm --version
-    - jlpm versions
     - jupyter-lab --help
     - jupyter-labextension --help
-    - jupyter-labhub --help
     - jupyter labextension list
     - jupyter lab licenses
     - jupyter lab path
     - jupyter server extension list
-    - jupyter serverextension list
     - jupyter server extension list 1>server_extensions 2>&1
     - cat server_extensions | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"  # [not win]
-    - jupyter serverextension list 1>serverextensions 2>&1
-    - cat serverextensions | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"   # [not win]
     - jupyter lab build --dev-build=False --minimize=False
     - jupyter lab clean
-  #downstreams:
-    # Additional testing for downstreams packages: ipympl, plotly, and pyviz_comms
-    #- ipympl
-    #- plotly
-    #- pyviz_comms
+    - python -m pytest -vv --pyargs jupyterlab
 
 about:
   home: https://github.com/jupyterlab/jupyterlab
