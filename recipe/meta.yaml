@@ -1,5 +1,5 @@
 {% set name = "jupyterlab" %}
-{% set version = "3.6.3" %}
+{% set version = "4.0.8" %}
 
 package:
   name: {{ name|lower }}
@@ -7,13 +7,13 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 373e9cfb8a72edd294be14f16662563a220cecf0fb26de7aab1af9a29b689b82
+  sha256: c4fe93f977bcc987bd395d7fae5ab02e0c042bf4e0f7c95196f3e2e578c2fb3a
 
 build:
   number: 0
-  # nodejs >=14,!=15.*,<17 currently isn't available on s390x.
-  skip: True  # [s390x or py<37]
-  script: {{ PYTHON }} -m pip install --install-option="--skip-npm" --no-deps --no-build-isolation . -vv
+  # nodejs currently isn't available on s390x.
+  skip: True  # [s390x or py<38]
+  script: {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
   entry_points:
     - jupyter-lab = jupyterlab.labapp:main
     - jupyter-labextension = jupyterlab.labextensions:main
@@ -28,58 +28,59 @@ app:
 
 requirements:
   host:
-    - jupyter-packaging 0.12.0
-    - packaging
+    - hatchling >=1.5.0
+    - hatch-jupyter-builder >=0.3.2
     - pip
     - python
-    - setuptools
-    - wheel
   run:
-    - ipython
-    - jinja2 >=2.1
-    - jupyter_core
-    - jupyter_server >=1.16,<3
-    - jupyter_server_ydoc >=0.8.0,<0.9.0
-    - jupyter_ydoc >=0.2.3,<0.3
-    - jupyterlab_server >=2.19,<3
-    - nbclassic
-    - notebook <7
-    - packaging
     - python
+    - async-lru >=1.0.0
+    - importlib-metadata >=4.8.3  # [py<310]
+    - importlib_resources >=1.4  # [py<39]
+    - ipykernel
+    - jinja2 >=3.0.3
+    - jupyter_core
+    - jupyter-lsp >=2.0.0
+    - jupyter_server >=2.4.0,<3
+    - jupyterlab_server >=2.19.0,<3
+    - notebook-shim >=0.2
+    - packaging
+    - traitlets
+    - tornado >=6.2.0
     - tomli  # [py<311]
-    - tornado >=6.1.0
+  run_constrained:
+    - nodejs >=18.0.0
 
-test:
+test:  
+  source_files:
+    - conftest.py
   requires:
-    - nodejs >=16.*,!=17.*,<19
     - pip
     - ripgrep
+    - pytest >=7.0
+    - pytest-console-scripts
+    - pytest-jupyter >=0.5.3
+    - pytest-timeout
+    - pytest-tornasync
+    - requests
+    - nodejs
   imports:
     - jupyterlab
   commands:
     - pip check
     - jupyter lab --version
     - jlpm --version
-    - jlpm versions
+    - jupyter-lab --help
+    - jupyter-labextension --help
     - jupyter labextension list
     - jupyter lab licenses
     - jupyter lab path
     - jupyter server extension list
-    - jupyter serverextension list
     - jupyter server extension list 1>server_extensions 2>&1
     - cat server_extensions | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"  # [not win]
-    - jupyter serverextension list 1>serverextensions 2>&1
-    - cat serverextensions | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"   # [not win]
-    # This is disabled because it depends on webpack 5.x, which in turn depends on Uppercase_Letter
-    # and Lowercase_Letter character classes in nodejs, which requires full ICU support. The code
-    # uses webpack 5.x features, so it is not trivial to work around.
-    # - jupyter lab build --dev-build=False --minimize=False
+    - jupyter lab build --dev-build=False --minimize=False
     - jupyter lab clean
-  #downstreams:
-    # Additional testing for downstreams packages: ipympl, plotly, and pyviz_comms
-    #- ipympl
-    #- plotly
-    #- pyviz_comms
+    - python -m pytest -vv --pyargs jupyterlab
 
 about:
   home: https://github.com/jupyterlab/jupyterlab
