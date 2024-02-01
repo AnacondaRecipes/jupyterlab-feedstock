@@ -10,7 +10,7 @@ source:
   sha256: d1aec24712566bc25a36229788242778e498ca4088028e2f9aa156b8b7fdc8fc
 
 build:
-  number: 0
+  number: 0 # trigger
   # nodejs currently isn't available on s390x.
   skip: True  # [s390x or py<38]
   script: {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
