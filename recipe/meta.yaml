@@ -46,6 +46,8 @@ requirements:
     - jupyterlab_server >=2.27.1,<3
     - notebook-shim >=0.2
     - packaging
+    # setuptools is required at runtime https://github.com/jupyterlab/jupyterlab/blob/v4.2.5/jupyterlab/federated_labextensions.py#L464.
+    - setuptools >=40.1.0
     - tomli >=1.2.2  # [py<311]
     - tornado >=6.2.0
     - traitlets
