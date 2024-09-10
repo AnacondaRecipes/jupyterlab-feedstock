@@ -12,7 +12,8 @@ source:
 build:
   number: 0
   # nodejs >=14,!=15.*,<17 currently isn't available on s390x.
-  skip: True  # [s390x or py<37]
+  # Skip py>311 because of missing notebook <7 in the main channel
+  skip: True  # [s390x or py<37 or py>311]
   script: {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
   entry_points:
     - jupyter-lab = jupyterlab.labapp:main
