@@ -1,5 +1,5 @@
 {% set name = "jupyterlab" %}
-{% set version = "3.6.7" %}
+{% set version = "3.6.8" %}
 
 package:
   name: {{ name|lower }}
@@ -7,12 +7,13 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 2fadeaec161b0d1aec19f17721d8b803aef1d267f89c8b636b703be14f435c8f
+  sha256: a2477383e23f20009188bd9dac7e6e38dbc54307bc36d716bea6ced450647c97
 
 build:
   number: 0
   # nodejs >=14,!=15.*,<17 currently isn't available on s390x.
-  skip: True  # [s390x or py<37]
+  # Skip py>311 because of missing notebook <7 in the main channel
+  skip: True  # [s390x or py<37 or py>311]
   script: {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
   entry_points:
     - jupyter-lab = jupyterlab.labapp:main
@@ -48,6 +49,8 @@ requirements:
     - python
     - tomli  # [py<311]
     - tornado >=6.1.0
+  run_constrained:
+    - nodejs >=16.*,!=17.*,<19
 
 test:
   requires:
@@ -75,11 +78,15 @@ test:
     # uses webpack 5.x features, so it is not trivial to work around.
     # - jupyter lab build --dev-build=False --minimize=False
     - jupyter lab clean
-  #downstreams:
-    # Additional testing for downstreams packages: ipympl, plotly, and pyviz_comms
-    #- ipympl
-    #- plotly
-    #- pyviz_comms
+  # downstreams:
+  #   #Additional testing for downstreams packages:
+  #   - anaconda-toolbox 0.4.0
+  #   - jupyterhub-singleuser 4.0.2
+  #   - jupyterlab-variableinspector 3.1.0
+  #   - aext-shared 0.4.0
+  #   - aext-core-server 0.4.0
+  #   - aext-core 0.4.0
+  #   - aext-assistant 0.4.0
 
 about:
   home: https://github.com/jupyterlab/jupyterlab
