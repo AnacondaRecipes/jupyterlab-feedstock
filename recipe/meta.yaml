@@ -1,5 +1,5 @@
 {% set name = "jupyterlab" %}
-{% set version = "4.2.5" %}
+{% set version = "4.3.4" %}
 
 package:
   name: {{ name|lower }}
@@ -7,18 +7,18 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: ae7f3a1b8cb88b4f55009ce79fa7c06f99d70cd63601ee4aa91815d054f46f75
+  sha256: f0bb9b09a04766e3423cccc2fc23169aa2ffedcdf8713e9e0fb33cac0b6859d0
 
 build:
-  number: 0 # trigger
+  number: 0
   # nodejs currently isn't available on s390x.
   skip: True  # [s390x or py<38]
   script: {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
   entry_points:
+    - jlpm = jupyterlab.jlpmapp:main
     - jupyter-lab = jupyterlab.labapp:main
     - jupyter-labextension = jupyterlab.labextensions:main
     - jupyter-labhub = jupyterlab.labhubapp:main
-    - jlpm = jupyterlab.jlpmapp:main
 
 app:
   entry: jupyter lab
@@ -36,8 +36,8 @@ requirements:
     - python
     - async-lru >=1.0.0
     - httpx >=0.25.0
-    - importlib_resources >=1.4   # [py<39]
     - importlib-metadata >=4.8.3  # [py<310]
+    - importlib-resources >=1.4   # [py<39]
     - ipykernel >=6.5.0
     - jinja2 >=3.0.3
     - jupyter_core
@@ -47,7 +47,7 @@ requirements:
     - notebook-shim >=0.2
     - packaging
     # setuptools is required at runtime https://github.com/jupyterlab/jupyterlab/blob/v4.2.5/jupyterlab/federated_labextensions.py#L464.
-    - setuptools >=40.1.0
+    - setuptools >=40.8.0
     - tomli >=1.2.2  # [py<311]
     - tornado >=6.2.0
     - traitlets
@@ -70,6 +70,9 @@ test:
     - virtualenv
   imports:
     - jupyterlab
+    - jupyterlab.extensions
+    - jupyterlab.galata
+    - jupyterlab.handlers
   commands:
     - pip check
     - jupyter lab --version
