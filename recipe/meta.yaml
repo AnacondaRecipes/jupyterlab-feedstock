@@ -1,18 +1,17 @@
 {% set name = "jupyterlab" %}
-{% set version = "4.3.4" %}
+{% set version = "4.4.4" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: f0bb9b09a04766e3423cccc2fc23169aa2ffedcdf8713e9e0fb33cac0b6859d0
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 163fee1ef702e0a057f75d2eed3ed1da8a986d59eb002cbeb6f0c2779e6cd153
 
 build:
   number: 0
-  # nodejs currently isn't available on s390x.
-  skip: True  # [s390x or py<38]
+  skip: true  # [py<39]
   script: {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
   entry_points:
     - jlpm = jupyterlab.jlpmapp:main
@@ -28,16 +27,15 @@ app:
 
 requirements:
   host:
-    - hatchling >=1.21.1
     - hatch-jupyter-builder >=0.3.2
     - pip
     - python
+    - hatchling >=1.21.1
   run:
     - python
     - async-lru >=1.0.0
     - httpx >=0.25.0
     - importlib-metadata >=4.8.3  # [py<310]
-    - importlib-resources >=1.4   # [py<39]
     - ipykernel >=6.5.0
     - jinja2 >=3.0.3
     - jupyter_core
@@ -47,12 +45,19 @@ requirements:
     - notebook-shim >=0.2
     - packaging
     # setuptools is required at runtime https://github.com/jupyterlab/jupyterlab/blob/v4.2.5/jupyterlab/federated_labextensions.py#L464.
-    - setuptools >=40.8.0
+    - setuptools >=41.1.0
     - tomli >=1.2.2  # [py<311]
     - tornado >=6.2.0
     - traitlets
   run_constrained:
+    # See the upstream environment.yml for the exact version range https://github.com/jupyterlab/jupyterlab/blob/v4.4.4/binder/environment.yml#L9
     - nodejs >=20.0.0,<21.0.0
+    # Optional dependencies 'upgrade-extension'
+    - pyyaml-include <3.0
+    - copier >=9,<10
+    - jinja2-time <0.3
+    - pydantic <3.0
+    - tomli-w <2.0
 
 test:
   source_files:
@@ -86,7 +91,7 @@ test:
     - jupyter server extension list 1>server_extensions 2>&1
     - cat server_extensions | rg "jupyterlab.*{{ version.replace(".", "\\.") }}.*OK"  # [not win]
     # jupyterlab extensions require nodejs >=20.0.0,<21.0.0,
-    # see https://github.com/jupyterlab/jupyterlab/blob/v4.2.5/docs/source/extension/extension_tutorial.rst#install-nodejs-jupyterlab-etc-in-a-conda-environment
+    # see https://github.com/jupyterlab/jupyterlab/blob/v4.4.4/docs/source/extension/extension_tutorial.rst#install-nodejs-jupyterlab-etc-in-a-conda-environment
     - jupyter lab build --dev-build=False --minimize=False
     - jupyter lab clean
     - python -m pytest -vv --pyargs jupyterlab
@@ -106,6 +111,8 @@ about:
     JupyterLab is the next-generation user interface for Project Jupyter. It offers all the familiar building blocks of the classic Jupyter Notebook (notebook, terminal, text editor, file browser, rich outputs, etc.) in a flexible and powerful user inteface. Eventually, JupyterLab will replace the classic Jupyter Notebook.
     JupyterLab can be extended using extensions that are npm packages and use our public APIs. You can search for the GitHub topic or npm keyword `jupyterlab-extension` to find extensions. To learn more about extensions, see our user documentation.
     JupyterLab is suitable for general usage. For JupyterLab extension developers, the extension APIs will continue to evolve.
+
+
 
 extra:
   recipe-maintainers:
