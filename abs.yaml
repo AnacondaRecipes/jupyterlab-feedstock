@@ -9,3 +9,4 @@ channels:
   - https://staging.continuum.io/pbp/fs/jupyter_server-feedstock/pr13/a871504
   - https://staging.continuum.io/pbp/fs/notebook-shim-feedstock/pr5/3d2ed13
   - https://staging.continuum.io/pbp/fs/jupyterlab_server-feedstock/pr28/b15e091
+  - https://staging.continuum.io/pbp/fs/jupyter-lsp-feedstock/pr4/670b8e8
