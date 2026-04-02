@@ -1,5 +1,5 @@
 {% set name = "jupyterlab" %}
-{% set version = "4.5.3" %}
+{% set version = "4.5.6" %}
 
 package:
   name: {{ name|lower }}
@@ -7,10 +7,10 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 4a159f71067cb38e4a82e86a42de8e7e926f384d7f2291964f282282096d27e8
+  sha256: 642fe2cfe7f0f5922a8a558ba7a0d246c7bc133b708dfe43f7b3a826d163cf42
 
 build:
-  number: 1
+  number: 0
   skip: true  # [py<39]
   script: {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
   entry_points:
@@ -75,9 +75,15 @@ test:
     - virtualenv
   imports:
     - jupyterlab
+    - jupyterlab.commands
+    - jupyterlab.coreconfig
+    - jupyterlab.debuglog
     - jupyterlab.extensions
     - jupyterlab.galata
     - jupyterlab.handlers
+    - jupyterlab.jlpmapp
+    - jupyterlab.labapp
+    - jupyterlab.semver
   commands:
     - pip check
     - jupyter lab --version
