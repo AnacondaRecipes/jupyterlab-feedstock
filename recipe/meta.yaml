@@ -19,12 +19,6 @@ build:
     - jupyter-labextension = jupyterlab.labextensions:main
     - jupyter-labhub = jupyterlab.labhubapp:main
 
-app:
-  entry: jupyter lab
-  icon: icon.png
-  summary: JupyterLab {{ version }}
-  type: desk
-
 requirements:
   host:
     - pip
@@ -119,6 +113,7 @@ about:
     JupyterLab is suitable for general usage. For JupyterLab extension developers, the extension APIs will continue to evolve.
 
 
+
 extra:
   recipe-maintainers:
     - jasongrout
@@ -129,3 +124,9 @@ extra:
     - ellisonbg
     - jtpio
     - bollwyvl
+
+app:
+  entry: jupyter lab
+  icon: icon.png
+  summary: JupyterLab {{ version }}
+  type: desk
