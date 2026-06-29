@@ -1,5 +1,5 @@
 {% set name = "jupyterlab" %}
-{% set version = "4.5.7" %}
+{% set version = "4.5.9" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 55a9822c4754da305f41e113452c68383e214dcf96de760146af89ce5d5117b0
+  sha256: dd79a073fecae7a39066ea99e4627ed6c76269ac926e95a810e1e1df6358d865
 
 build:
   number: 0
@@ -18,12 +18,6 @@ build:
     - jupyter-lab = jupyterlab.labapp:main
     - jupyter-labextension = jupyterlab.labextensions:main
     - jupyter-labhub = jupyterlab.labhubapp:main
-
-app:
-  entry: jupyter lab
-  icon: icon.png
-  summary: JupyterLab {{ version }}
-  type: desk
 
 requirements:
   host:
@@ -43,7 +37,7 @@ requirements:
     - jupyter-lsp >=2.0.0
     - jupyterlab_server >=2.28,<3
     - notebook-shim >=0.2
-    - packaging
+    - packaging >=23.2
     # setuptools is required at runtime https://github.com/jupyterlab/jupyterlab/blob/v4.2.5/jupyterlab/federated_labextensions.py#L464.
     - setuptools >=41.1.0
     - tomli >=1.2.2  # [py<311]
@@ -103,7 +97,7 @@ test:
     - python -m pytest -vv --pyargs jupyterlab
 
 about:
-  home: https://github.com/jupyterlab/jupyterlab
+  home: https://jupyter.org
   license: BSD-3-Clause
   license_family: BSD
   license_file:
@@ -117,7 +111,6 @@ about:
     JupyterLab is the next-generation user interface for Project Jupyter. It offers all the familiar building blocks of the classic Jupyter Notebook (notebook, terminal, text editor, file browser, rich outputs, etc.) in a flexible and powerful user inteface. Eventually, JupyterLab will replace the classic Jupyter Notebook.
     JupyterLab can be extended using extensions that are npm packages and use our public APIs. You can search for the GitHub topic or npm keyword `jupyterlab-extension` to find extensions. To learn more about extensions, see our user documentation.
     JupyterLab is suitable for general usage. For JupyterLab extension developers, the extension APIs will continue to evolve.
-
 
 extra:
   recipe-maintainers:
