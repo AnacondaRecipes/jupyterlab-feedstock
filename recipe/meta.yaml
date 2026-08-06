@@ -44,8 +44,9 @@ requirements:
     - traitlets
     - typing-extensions >=4.4.0  # [py<312]
   run_constrained:
-    # See the upstream environment.yml for the exact version range https://github.com/jupyterlab/jupyterlab/blob/v4.5.3/binder/environment.yml#L9
-    - nodejs >=20.0.0,<21.0.0
+    # nodejs range matches jupyter-builder's own constraint, which is narrower than
+    # upstream's binder/environment.yml pin (nodejs >=20,<21) and is the binding one
+    - nodejs >=20.19,<21|>=22.12
     # Optional dependencies 'upgrade-extension'
     - pyyaml-include <3.0
     - copier >=9,<10
