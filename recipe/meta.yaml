@@ -14,7 +14,6 @@ build:
   skip: true  # [py<310]
   script: {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
   entry_points:
-    - jlpm = jupyterlab.jlpmapp:main
     - jupyter-lab = jupyterlab.labapp:main
     - jupyter-labextension = jupyterlab.labextensions:main
     - jupyter-labhub = jupyterlab.labhubapp:main
@@ -76,7 +75,6 @@ test:
     - jupyterlab.extensions
     - jupyterlab.galata
     - jupyterlab.handlers
-    - jupyterlab.jlpmapp
     - jupyterlab.labapp
     - jupyterlab.semver
   commands:
