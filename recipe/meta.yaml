@@ -76,7 +76,6 @@ test:
     - jupyterlab.galata
     - jupyterlab.handlers
     - jupyterlab.labapp
-    - jupyterlab.semver
   commands:
     - pip check
     - jupyter lab --version
