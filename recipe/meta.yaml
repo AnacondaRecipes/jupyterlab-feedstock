@@ -1,5 +1,5 @@
 {% set name = "jupyterlab" %}
-{% set version = "4.5.9" %}
+{% set version = "4.6.2" %}
 
 package:
   name: {{ name|lower }}
@@ -7,14 +7,13 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: dd79a073fecae7a39066ea99e4627ed6c76269ac926e95a810e1e1df6358d865
+  sha256: e18ce8b34f3de350e93cd5b2c4f3ae884cbe266eb76bf5d6825a4ed34c13bcff
 
 build:
   number: 0
-  skip: true  # [py<39]
+  skip: true  # [py<310]
   script: {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
   entry_points:
-    - jlpm = jupyterlab.jlpmapp:main
     - jupyter-lab = jupyterlab.labapp:main
     - jupyter-labextension = jupyterlab.labextensions:main
     - jupyter-labhub = jupyterlab.labhubapp:main
@@ -25,27 +24,28 @@ requirements:
     - python
     - hatchling >=1.21.1
     - hatch-jupyter-builder >=0.3.2
+    - jupyter-builder >=1.0.2
   run:
     - python
     - async-lru >=1.0.0
     - httpx >=0.25.0,<1
-    - importlib-metadata >=4.8.3  # [py<310]
     - ipykernel >=6.5.0,!=6.30.0
     - jinja2 >=3.0.3
     - jupyter_core
-    - jupyter_server >=2.4.0,<3
+    - jupyter_server >=2.19.0,<3
+    - jupyter-builder >=1.0.2
     - jupyter-lsp >=2.0.0
     - jupyterlab_server >=2.28,<3
     - notebook-shim >=0.2
     - packaging >=23.2
-    # setuptools is required at runtime https://github.com/jupyterlab/jupyterlab/blob/v4.2.5/jupyterlab/federated_labextensions.py#L464.
-    - setuptools >=41.1.0
     - tomli >=1.2.2  # [py<311]
     - tornado >=6.2.0
     - traitlets
+    - typing-extensions >=4.4.0  # [py<312]
   run_constrained:
-    # See the upstream environment.yml for the exact version range https://github.com/jupyterlab/jupyterlab/blob/v4.5.3/binder/environment.yml#L9
-    - nodejs >=20.0.0,<21.0.0
+    # nodejs range matches jupyter-builder's own constraint, which is narrower than
+    # upstream's binder/environment.yml pin (nodejs >=20,<21) and is the binding one
+    - nodejs >=20.19,<21|>=22.12
     # Optional dependencies 'upgrade-extension'
     - pyyaml-include <3.0
     - copier >=9,<10
@@ -75,9 +75,7 @@ test:
     - jupyterlab.extensions
     - jupyterlab.galata
     - jupyterlab.handlers
-    - jupyterlab.jlpmapp
     - jupyterlab.labapp
-    - jupyterlab.semver
   commands:
     - pip check
     - jupyter lab --version
