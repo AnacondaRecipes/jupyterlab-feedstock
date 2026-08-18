@@ -10,7 +10,7 @@ source:
   sha256: dd79a073fecae7a39066ea99e4627ed6c76269ac926e95a810e1e1df6358d865
 
 build:
-  number: 0
+  number: 1
   skip: true  # [py<39]
   script: {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
   entry_points:
@@ -18,6 +18,12 @@ build:
     - jupyter-lab = jupyterlab.labapp:main
     - jupyter-labextension = jupyterlab.labextensions:main
     - jupyter-labhub = jupyterlab.labhubapp:main
+
+app:
+  entry: jupyter lab
+  icon: icon.png
+  summary: JupyterLab {{ version }}
+  type: desk
 
 requirements:
   host:
