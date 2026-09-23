@@ -1,5 +1,5 @@
 {% set name = "jupyterlab" %}
-{% set version = "4.6.2" %}
+{% set version = "4.6.4" %}
 
 package:
   name: {{ name|lower }}
@@ -7,10 +7,10 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: e18ce8b34f3de350e93cd5b2c4f3ae884cbe266eb76bf5d6825a4ed34c13bcff
+  sha256: 404f49b081819378524886c9db66dba57a5565981eff885830df1baba3a17df5
 
 build:
-  number: 1
+  number: 0
   skip: true  # [py<310]
   script: {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
   entry_points:
