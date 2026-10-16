@@ -1,0 +1,60 @@
+Pin Rspack to 2.0.4 to avoid a crash in the win32-arm64 native binding.
+
+The @rspack/binding-win32-arm64-msvc binary shipped with Rspack 2.0.1-2.0.3
+segfaults (0xC0000005 / STATUS_ACCESS_VIOLATION) during Node process teardown.
+As a result `jupyter lab build` returns a non-zero exit code and JupyterLab
+reports "JupyterLab failed to build" even though the Rspack compilation itself
+succeeds and all assets are produced. Rspack 2.0.4 bundles a fixed mimalloc
+(>= 3.3.2) and exits cleanly.
+
+Upstream issue: https://github.com/web-infra-dev/rspack/issues/13925
+diff --git a/jupyterlab/staging/package.json b/jupyterlab/staging/package.json
+index 849ffa8..1f1ab40 100644
+--- a/jupyterlab/staging/package.json
++++ b/jupyterlab/staging/package.json
+@@ -146,6 +146,9 @@
+     "@lumino/widgets": "^2.3.1-alpha.1",
+     "@microsoft/fast-element": "^1.12.0",
+     "@microsoft/fast-foundation": "^2.49.2",
++    "@rspack/binding": "2.0.4",
++    "@rspack/cli": "2.0.4",
++    "@rspack/core": "2.0.4",
+     "react": "^18.2.0",
+     "react-dom": "^18.2.0",
+     "yjs": "^13.5.40"
+@@ -210,8 +213,8 @@
+     "@jupyterlab/buildutils": "^4.6.4",
+     "@module-federation/runtime-tools": "^2.0.0",
+     "@rsdoctor/rspack-plugin": "^1.3.12",
+-    "@rspack/cli": "^2.0.2",
+-    "@rspack/core": "^2.0.2",
++    "@rspack/cli": "2.0.4",
++    "@rspack/core": "2.0.4",
+     "chokidar": "^3.4.0",
+     "css-loader": "^7.1.4",
+     "duplicate-package-checker-webpack-plugin": "^3.0.0",
+diff --git a/jupyterlab/static/package.json b/jupyterlab/static/package.json
+index 849ffa8..1f1ab40 100644
+--- a/jupyterlab/static/package.json
++++ b/jupyterlab/static/package.json
+@@ -146,6 +146,9 @@
+     "@lumino/widgets": "^2.3.1-alpha.1",
+     "@microsoft/fast-element": "^1.12.0",
+     "@microsoft/fast-foundation": "^2.49.2",
++    "@rspack/binding": "2.0.4",
++    "@rspack/cli": "2.0.4",
++    "@rspack/core": "2.0.4",
+     "react": "^18.2.0",
+     "react-dom": "^18.2.0",
+     "yjs": "^13.5.40"
+@@ -210,8 +213,8 @@
+     "@jupyterlab/buildutils": "^4.6.4",
+     "@module-federation/runtime-tools": "^2.0.0",
+     "@rsdoctor/rspack-plugin": "^1.3.12",
+-    "@rspack/cli": "^2.0.2",
+-    "@rspack/core": "^2.0.2",
++    "@rspack/cli": "2.0.4",
++    "@rspack/core": "2.0.4",
+     "chokidar": "^3.4.0",
+     "css-loader": "^7.1.4",
+     "duplicate-package-checker-webpack-plugin": "^3.0.0",

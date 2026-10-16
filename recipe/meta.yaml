@@ -8,9 +8,15 @@ package:
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: 404f49b081819378524886c9db66dba57a5565981eff885830df1baba3a17df5
+  patches: # [win and arm64]
+    # Rspack 2.0.1-2.0.3 ship a @rspack/binding-win32-arm64-msvc binary that
+    # segfaults (0xC0000005) on process exit, making `jupyter lab build` return
+    # a non-zero exit code even though the build itself succeeds. Pin 2.0.4.
+    # https://github.com/web-infra-dev/rspack/issues/13925
+    - 0001-pin-rspack-2.0.4.patch  # [win and arm64]
 
 build:
-  number: 0
+  number: 1
   skip: true  # [py<310]
   script: {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
   entry_points:
