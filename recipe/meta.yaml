@@ -1,5 +1,5 @@
 {% set name = "jupyterlab" %}
-{% set version = "4.6.4" %}
+{% set version = "4.6.6" %}
 
 package:
   name: {{ name|lower }}
@@ -7,8 +7,8 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 404f49b081819378524886c9db66dba57a5565981eff885830df1baba3a17df5
-  patches: # [win and arm64]
+  sha256: 5f6fbb409158167aeefb5781d6f0b228e24b493cb6e6f1320fb5bc8897acc223
+  patches:  # [win and arm64]
     # Rspack 2.0.1-2.0.3 ship a @rspack/binding-win32-arm64-msvc binary that
     # segfaults (0xC0000005) on process exit, making `jupyter lab build` return
     # a non-zero exit code even though the build itself succeeds. Pin 2.0.4.
@@ -16,19 +16,13 @@ source:
     - 0001-pin-rspack-2.0.4.patch  # [win and arm64]
 
 build:
-  number: 1
+  number: 0
   skip: true  # [py<310]
   script: {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
   entry_points:
     - jupyter-lab = jupyterlab.labapp:main
     - jupyter-labextension = jupyterlab.labextensions:main
     - jupyter-labhub = jupyterlab.labhubapp:main
-
-app:
-  entry: jupyter lab
-  icon: icon.png
-  summary: JupyterLab {{ version }}
-  type: desk
 
 requirements:
   host:
@@ -47,13 +41,14 @@ requirements:
     - jupyter_server >=2.19.0,<3
     - jupyter-builder >=1.0.2
     - jupyter-lsp >=2.0.0
-    - jupyterlab_server >=2.28,<3
+    - jupyterlab_server >=2.28.0,<3
     - notebook-shim >=0.2
     - packaging >=23.2
     - tomli >=1.2.2  # [py<311]
     - tornado >=6.2.0
     - traitlets
     - typing-extensions >=4.4.0  # [py<312]
+    - typing_extensions >=4.4.0  # [py<312]
   run_constrained:
     # nodejs range matches jupyter-builder's own constraint, which is narrower than
     # upstream's binder/environment.yml pin (nodejs >=20,<21) and is the binding one
@@ -122,6 +117,16 @@ about:
     JupyterLab can be extended using extensions that are npm packages and use our public APIs. You can search for the GitHub topic or npm keyword `jupyterlab-extension` to find extensions. To learn more about extensions, see our user documentation.
     JupyterLab is suitable for general usage. For JupyterLab extension developers, the extension APIs will continue to evolve.
 
+
+
+
+
+
+
+
+
+
+
 extra:
   recipe-maintainers:
     - jasongrout
@@ -132,3 +137,9 @@ extra:
     - ellisonbg
     - jtpio
     - bollwyvl
+
+app:
+  entry: jupyter lab
+  icon: icon.png
+  summary: JupyterLab {{ version }}
+  type: desk
