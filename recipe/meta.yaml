@@ -24,6 +24,12 @@ build:
     - jupyter-labextension = jupyterlab.labextensions:main
     - jupyter-labhub = jupyterlab.labhubapp:main
 
+app:
+  entry: jupyter lab
+  icon: icon.png
+  summary: JupyterLab {{ version }}
+  type: desk
+
 requirements:
   host:
     - pip
@@ -48,7 +54,6 @@ requirements:
     - tornado >=6.2.0
     - traitlets
     - typing-extensions >=4.4.0  # [py<312]
-    - typing_extensions >=4.4.0  # [py<312]
   run_constrained:
     # nodejs range matches jupyter-builder's own constraint, which is narrower than
     # upstream's binder/environment.yml pin (nodejs >=20,<21) and is the binding one
@@ -117,16 +122,6 @@ about:
     JupyterLab can be extended using extensions that are npm packages and use our public APIs. You can search for the GitHub topic or npm keyword `jupyterlab-extension` to find extensions. To learn more about extensions, see our user documentation.
     JupyterLab is suitable for general usage. For JupyterLab extension developers, the extension APIs will continue to evolve.
 
-
-
-
-
-
-
-
-
-
-
 extra:
   recipe-maintainers:
     - jasongrout
@@ -137,9 +132,3 @@ extra:
     - ellisonbg
     - jtpio
     - bollwyvl
-
-app:
-  entry: jupyter lab
-  icon: icon.png
-  summary: JupyterLab {{ version }}
-  type: desk
